@@ -2,5 +2,5 @@ allowBuilds:
   '@nestjs/core': set this to true or false
   '@prisma/engines': false
   prisma: false
-  sharp: set this to true or false
+  sharp: false
   unrs-resolver: false

@@ -1,4 +1,3 @@
-
 import { Injectable } from '@nestjs/common';
 import { User } from './user';
 import { MailService } from './mail.server';
@@ -8,20 +7,25 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { QueryUserDto } from './dto/query-user-dto';
 @Injectable()
 export class UserService {
-  constructor(private readonly mailService: MailService, private readonly prismaService: PrismaService) { }
+  constructor(
+    private readonly mailService: MailService,
+    private readonly prismaService: PrismaService,
+  ) {}
   // 模拟数据库中的用户数据
-  private users: User[] = [{
-    id: 1,
-    name: '用户1',
-    age: 20,
-    email: ''
-  },
-  {
-    id: 2,
-    name: '用户2',
-    age: 22,
-    email: ''
-  }]; // 模拟数据库中的用户数据
+  private users: User[] = [
+    {
+      id: 1,
+      name: '用户1',
+      age: 20,
+      email: '',
+    },
+    {
+      id: 2,
+      name: '用户2',
+      age: 22,
+      email: '',
+    },
+  ]; // 模拟数据库中的用户数据
   // 具体的业务逻辑 调用第三方的api  数据库 数据转换
   getUser(): string {
     return 'This is the user service';
@@ -35,8 +39,7 @@ export class UserService {
         role: createUserDto.role || 'user', // 默认角色为 'user'
       },
     });
-    return { success: true, message: `用户 ${user.name} 创建成功`, data: user };  
-
+    return { success: true, message: `用户 ${user.name} 创建成功`, data: user };
   }
   async findAll() {
     const users = await this.prismaService.user.findMany({
@@ -48,9 +51,9 @@ export class UserService {
         createdAt: true,
         updatedAt: true,
       },
-      orderBy: {createdAt: 'desc'}, // 按照创建时间降序排序
+      orderBy: { createdAt: 'desc' }, // 按照创建时间降序排序
     });
-    return {total: users.length, data: users};
+    return { total: users.length, data: users };
   }
   async findOne(id: string) {
     const user = await this.prismaService.user.findUnique({
@@ -72,7 +75,7 @@ export class UserService {
             updatedAt: true,
           },
           orderBy: { createdAt: 'desc' }, // 按照创建时间降序排序
-      }
+        },
       },
     });
     if (!user) {
@@ -81,29 +84,35 @@ export class UserService {
     return { success: true, data: user };
   }
   removeUser(id: string) {
-    return this.prismaService.user.delete({
-      where: { id: parseInt(id) },
-    }).then(() => {
-      return { success: true, message: `用户 ${id} 删除成功` };
-    }).catch(() => {
-      return { success: false, message: `用户 ${id} 不存在` };
-    });
+    return this.prismaService.user
+      .delete({
+        where: { id: parseInt(id) },
+      })
+      .then(() => {
+        return { success: true, message: `用户 ${id} 删除成功` };
+      })
+      .catch(() => {
+        return { success: false, message: `用户 ${id} 不存在` };
+      });
   }
 
   updateUser(id: string, updateUserDto: UpdateUserDto) {
-    return this.prismaService.user.update({
-      where: { id: parseInt(id) },
-      data: {
-        name: updateUserDto.name,
-        email: updateUserDto.email,
-        password: updateUserDto.password,
-        role: updateUserDto.role,
-      },
-    }).then((user) => {
-      return { success: true, message: `用户 ${id} 更新成功`, data: user };
-    }).catch(() => {
-      return { success: false, message: `用户 ${id} 不存在` };
-    });
+    return this.prismaService.user
+      .update({
+        where: { id: parseInt(id) },
+        data: {
+          name: updateUserDto.name,
+          email: updateUserDto.email,
+          password: updateUserDto.password,
+          role: updateUserDto.role,
+        },
+      })
+      .then((user) => {
+        return { success: true, message: `用户 ${id} 更新成功`, data: user };
+      })
+      .catch(() => {
+        return { success: false, message: `用户 ${id} 不存在` };
+      });
   }
   async searchUsers(query: QueryUserDto) {
     const { page = '1', pageSize = '10', name, role } = query;
@@ -124,7 +133,7 @@ export class UserService {
       where.role = role;
     }
     const [total, users] = await this.prismaService.$transaction([
-      this.prismaService.user.count({ where }), // 获取总记录数 
+      this.prismaService.user.count({ where }), // 获取总记录数
       this.prismaService.user.findMany({
         where,
         skip,
@@ -154,7 +163,6 @@ export class UserService {
       },
       data: users, // 当前页数据
     };
-
   }
 
   searchUsers1(query: QueryUserDto) {
@@ -168,19 +176,20 @@ export class UserService {
 
     const take = parseInt(pageSize);
 
-    return this.prismaService.user.findMany({
-      where: {
-        name: name ? { contains: name } : undefined,
-        role: role || undefined,
-      },
-      skip,
-      take,
-      orderBy: { createdAt: 'desc' },
-    }).then(users => {
-      return { total: users.length, data: users };
-    });
+    return this.prismaService.user
+      .findMany({
+        where: {
+          name: name ? { contains: name } : undefined,
+          role: role || undefined,
+        },
+        skip,
+        take,
+        orderBy: { createdAt: 'desc' },
+      })
+      .then((users) => {
+        return { total: users.length, data: users };
+      });
   }
-
 
   // createUser(user: CreateUserDto) {
   //   this.mailService.sendMail({
@@ -208,8 +217,8 @@ export class UserService {
       id,
       name: '李四',
       age: 25,
-      email: 'lisi@example.com'
-    }
+      email: 'lisi@example.com',
+    };
   }
   getList(page: number, size: number) {
     // 这里模拟分页查询，实际项目中会调用数据库
@@ -220,56 +229,56 @@ export class UserService {
         id: 1,
         name: '用户1',
         age: 20,
-        email: ''
+        email: '',
       },
       {
         id: 2,
         name: '用户2',
         age: 22,
-        email: ''
+        email: '',
       },
       {
         id: 3,
         name: '用户3',
         age: 24,
-        email: ''
+        email: '',
       },
       // ... 模拟更多用户数据
-    ]
+    ];
   }
   updateUser1(id: string, user: User) {
     // 这里模拟更新用户，实际项目中会调用数据库
-    const index = this.users.findIndex(u => u.id === parseInt(id));
+    const index = this.users.findIndex((u) => u.id === parseInt(id));
     if (index === -1) {
       return {
         success: false,
-        message: `用户 ${id} 不存在`
-      }
+        message: `用户 ${id} 不存在`,
+      };
     }
     return {
       success: true,
       message: `用户 ${id} 更新成功`,
-      data:  this.users[index] = {
-      id: parseInt(id),
-      name: user.name || this.users[index].name,
-      age: user.age || this.users[index].age,
-      email: user.email || this.users[index].email
-    }
-    }
+      data: (this.users[index] = {
+        id: parseInt(id),
+        name: user.name || this.users[index].name,
+        age: user.age || this.users[index].age,
+        email: user.email || this.users[index].email,
+      }),
+    };
   }
   deleteUser(id: string) {
     // 这里模拟删除用户，实际项目中会调用数据库
-    const index = this.users.findIndex(u => u.id === parseInt(id));
+    const index = this.users.findIndex((u) => u.id === parseInt(id));
     if (index === -1) {
       return {
         success: false,
-        message: `用户 ${id} 不存在`
-      }
+        message: `用户 ${id} 不存在`,
+      };
     }
     this.users.splice(index, 1);
     return {
       success: true,
-      message: `用户 ${id} 删除成功`
-    }
+      message: `用户 ${id} 删除成功`,
+    };
   }
-}   
+}
