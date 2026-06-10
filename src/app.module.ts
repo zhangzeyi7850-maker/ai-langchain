@@ -11,12 +11,14 @@ import { UserModule } from './user/user.module';
 import { OrderModule } from './order/order.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { PostModule } from './post/post.module';
+import { ModelsModule } from './models/models.module';
 
 @Module({
   imports: [DemoModule, UserModule, OrderModule, PrismaModule, PostModule,
     ConfigModule.forRoot({
       isGlobal: true, // 👈 关键
-    }),],
+    }),
+    ModelsModule,],
   controllers: [AppController, TestController],
   providers: [AppService, TestService,],
 })

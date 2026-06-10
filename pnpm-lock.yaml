@@ -2207,7 +2207,6 @@ packages:
 
   better-result@2.9.2:
     resolution: {integrity: sha512-WIFoBPCdnTOdk9inkE1ZRvCZ4P0CpSkAiLlchC65N7n9DcjZ3NhqkBOlafzpOVnO8ixyi37kicmSJ3ENhPZl7Q==}
-    hasBin: true
 
   binary-extensions@2.3.0:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
@@ -6417,7 +6416,7 @@ snapshots:
 
   agent-base@6.0.0:
     dependencies:
-      debug: 4.3.4
+      debug: 4.4.3
     transitivePeerDependencies:
       - supports-color
 
@@ -7392,7 +7391,7 @@ snapshots:
   https-proxy-agent@5.0.1:
     dependencies:
       agent-base: 6.0.0
-      debug: 4.3.4
+      debug: 4.4.3
     transitivePeerDependencies:
       - supports-color
 
