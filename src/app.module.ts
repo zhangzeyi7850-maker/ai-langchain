@@ -14,12 +14,18 @@ import { PostModule } from './post/post.module';
 import { ModelsModule } from './models/models.module';
 
 @Module({
-  imports: [DemoModule, UserModule, OrderModule, PrismaModule, PostModule,
+  imports: [
+    DemoModule,
+    UserModule,
+    OrderModule,
+    PrismaModule,
+    PostModule,
     ConfigModule.forRoot({
       isGlobal: true, // 👈 关键
     }),
-    ModelsModule,],
+    ModelsModule,
+  ],
   controllers: [AppController, TestController],
-  providers: [AppService, TestService,],
+  providers: [AppService, TestService],
 })
 export class AppModule {}

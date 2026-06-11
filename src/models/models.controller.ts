@@ -1,4 +1,4 @@
-import { Controller, Post } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { ModelsService } from './models.service';
 
 @Controller('models')
@@ -7,7 +7,7 @@ export class ModelsController {
 
   // chat接口
   @Post('chat')
-  baseChat() {
-    return this.modelsService.baseChat();
+  baseChat(@Body() { message }: { message: string }) {
+    return this.modelsService.baseChat(message);
   }
 }
