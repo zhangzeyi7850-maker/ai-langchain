@@ -10,4 +10,9 @@ export class ModelsController {
   baseChat(@Body() { message }: { message: string }) {
     return this.modelsService.baseChat(message);
   }
+
+  @Post('chat-system')
+  chatSystem(@Body() { system, message }: { system: string; message: string }) {
+    return this.modelsService.chatSystem({ system, message });
+  }
 }
