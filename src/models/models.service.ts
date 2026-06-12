@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ChatOllama } from '@langchain/ollama';
 import { HumanMessage, SystemMessage } from '@langchain/core/messages';
+import type { Response } from 'express';
 import { config } from '../config';
 
 @Injectable()
@@ -38,5 +39,24 @@ export class ModelsService {
       answer: response.content,
       usage: response.usage_metadata,
     }; // 返回一个刻度流，前端可以通过事件监听来获取模型的回答。
+  }
+
+  async chatStream(message: string, res: Response) {
+    // 设置响应头，告诉客户端是一个流式响应
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+    res.setHeader('Access-Control-Allow-Origin', '*'); // 允许跨域访问，实际项目中需要具体域名
+
+    const stream = await this.llm.stream([new HumanMessage(message)]);
+
+    for await (const chunk of stream) {
+      console.log('Received chunk:', chunk);
+      res.write(`data: ${JSON.stringify(chunk)}\n\n`);
+    }
+
+    // 当流结束时，给客户端发送一个特殊事件
+    res.write(`data [DONE]\n\n`);
+    res.end();
   }
 }
