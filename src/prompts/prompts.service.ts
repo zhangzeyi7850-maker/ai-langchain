@@ -14,7 +14,7 @@ export class PromptsService {
     numPredict: 512, // 本次回答最多生成512 tokens的内容
   });
 
-  // 翻译示例，使用ChatPromptTemplate构建对话提示词，适合多轮对话的场景，可以清晰地定义系统提示词和用户输入。
+  // 翻译示例，使用ChatPromptTemplate.fromMessages构建对话提示词，适合多轮对话的场景(现在还不是多轮对话，需要加入了历史信息后才适合多轮对话)。
   async translate(text: string, targetLanguage: string) {
     const prompt = ChatPromptTemplate.fromMessages([
       ['system', '你是一个翻译助手，只输出翻译结果，帮助用户将文本翻译成指定语言'], // 系统提示词 这里可以像下一句注释一样，
