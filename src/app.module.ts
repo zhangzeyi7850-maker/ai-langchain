@@ -12,6 +12,7 @@ import { OrderModule } from './order/order.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { PostModule } from './post/post.module';
 import { ModelsModule } from './models/models.module';
+import { PromptsModule } from './prompts/prompts.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ModelsModule } from './models/models.module';
       isGlobal: true, // 👈 关键
     }),
     ModelsModule,
+    PromptsModule,
   ],
   controllers: [AppController, TestController],
   providers: [AppService, TestService],
