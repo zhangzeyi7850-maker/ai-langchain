@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ChatOllama } from '@langchain/ollama';
 import { config } from '../config';
-import { ChatPromptTemplate } from '@langchain/core/prompts';
+import { ChatPromptTemplate, PromptTemplate, FewShotPromptTemplate } from '@langchain/core/prompts';
 import { StringOutputParser } from '@langchain/core/output_parsers';
 
 @Injectable()
@@ -49,6 +49,34 @@ export class PromptsService {
       original: text,
       maxWords,
       summary: res,
+    };
+  }
+
+  // FewShotPromptTemplate 的示例，适合需要提供多个示例来指导模型输出的场景。下面是一个文本分类的例子，通过提供几个带标签的文本示例来指导模型进行情感分类。
+  async classify(text: string) {
+    // 数组的例子
+    const examples = [
+      { text: '今天天气真好，我们去公园玩吧', label: '积极' },
+      { text: '我讨厌这个产品，太差了', label: '消极' },
+      { text: '这个电影还行，有些地方不错', label: '中性' },
+      { text: '这个餐厅的服务太差了，我再也不来了', label: '消极' },
+    ];
+
+    const examplePrompt = PromptTemplate.fromTemplate('输入: {text}\n\n输出: {label}');
+
+    const fewShotPrompt = new FewShotPromptTemplate({
+      examples,
+      examplePrompt,
+      prefix: '请根据用户输入的文本内容进行情感分类，输出积极、消极或者中立',
+      suffix: '输入: {text}\n\n输出:',
+      inputVariables: ['text'],
+    });
+
+    const formatted = await fewShotPrompt.format({ text });
+    const res = await this.llm.invoke(formatted);
+    return {
+      text,
+      label: String(res.content).trim(),
     };
   }
 }

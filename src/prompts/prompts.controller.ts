@@ -16,4 +16,10 @@ export class PromptsController {
     const { text, maxWords } = body;
     return this.promptsService.summarize(text, maxWords);
   }
+
+  @Post('classify')
+  classify(@Body() body: { text: string }) {
+    const { text } = body;
+    return this.promptsService.classify(text);
+  }
 }
