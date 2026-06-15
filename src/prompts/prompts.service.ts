@@ -62,21 +62,44 @@ export class PromptsService {
       { text: '这个餐厅的服务太差了，我再也不来了', label: '消极' },
     ];
 
-    const examplePrompt = PromptTemplate.fromTemplate('输入: {text}\n\n输出: {label}');
+    const examplePrompt = PromptTemplate.fromTemplate('输入: {text}\n\n输出: {label}'); // 定义每个示例的格式，告诉模型输入是什么，输出是什么
 
     const fewShotPrompt = new FewShotPromptTemplate({
-      examples,
-      examplePrompt,
-      prefix: '请根据用户输入的文本内容进行情感分类，输出积极、消极或者中立',
-      suffix: '输入: {text}\n\n输出:',
-      inputVariables: ['text'],
+      examples, // 提供示例数据
+      examplePrompt, // 定义每个示例的格式
+      prefix: '请根据用户输入的文本内容进行情感分类，输出积极、消极或者中立', // 前缀，给模型一些指导信息，告诉它这个任务是什么
+      suffix: '输入: {text}\n\n输出:', // 后缀，定义用户输入的格式，告诉模型这是用户输入的文本，接下来是它需要生成的输出
+      inputVariables: ['text'], // 定义输入变量，这里是用户输入的文本
     });
 
-    const formatted = await fewShotPrompt.format({ text });
+    const formatted = await fewShotPrompt.format({ text }); // 格式化提示词，生成最终的提示词文本，准备传给模型
     const res = await this.llm.invoke(formatted);
     return {
       text,
       label: String(res.content).trim(),
+    };
+  }
+
+  // 利用大模型 codeReview
+  async codeReview(code: string, language: string) {
+    const prompt = ChatPromptTemplate.fromMessages([
+      [
+        'system',
+        `你是一个资深的${language}代码审查助手，帮助用户审查代码，指出其中的错误和改进建议。请直接输出审查结果，不要其他多余的内容。`,
+      ],
+      ['user', `请审查以下${language}代码，并指出其中的错误和改进建议：\n\n${code}`],
+    ]);
+    const chain = prompt.pipe(this.llm).pipe(new StringOutputParser());
+
+    const res = await chain.invoke({
+      code,
+      language,
+    });
+
+    return {
+      language,
+      code,
+      review: res,
     };
   }
 }

@@ -22,4 +22,10 @@ export class PromptsController {
     const { text } = body;
     return this.promptsService.classify(text);
   }
+
+  @Post('code-review')
+  codeReview(@Body() body: { code: string; language: string }) {
+    const { code, language } = body;
+    return this.promptsService.codeReview(code, language);
+  }
 }
