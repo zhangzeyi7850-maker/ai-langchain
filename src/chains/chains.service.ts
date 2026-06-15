@@ -99,4 +99,54 @@ export class ChainsService {
       seoTitle,
     };
   }
+
+  // 条件链 用户输入一个问题，模型会根据问题的内容和类型来判断应该调用哪个功能模块来处理这个问题。例如翻译、总结、分类等。
+  async smartRouter(question: string) {
+    // 第一步分类
+    const routerPrompt = ChatPromptTemplate.fromMessages([
+      [
+        'system',
+        `你是一个智能路由助手，根据用户的问题内容和类型来判断应该调用哪个功能模块来处理这个问题。只输出分类标签：
+        技术问题-TECH、
+        退款问题-REFUND、
+        订单问题-ORDER、
+        投诉建议-COMPLAINT、
+        其他-OTHER，并给出理由。`,
+      ],
+      [
+        'human',
+        '根据用户的问题： {question}，判断应该调用哪个功能模块来处理这个问题，并给出理由。',
+      ],
+    ])
+      .pipe(this.llm)
+      .pipe(new StringOutputParser());
+
+    const category = await routerPrompt.invoke({ question }); // 获取分类标签和理由
+
+    // 这里在真实的项目中通常会有一个更复杂的系统Map，可能会有更多的分类和对应的处理模块，这里为了演示方便，简单的写了几个分类和对应的系统消息。
+    const systemMap: Record<string, string> = {
+      TECH: '你是一个技术支持助手，专门处理技术问题。',
+      REFUND: '你是一个退款处理助手，专门处理退款问题。',
+      ORDER: '你是一个订单处理助手，专门处理订单问题。',
+      COMPLAINT: '你是一个投诉建议助手，专门处理投诉建议。',
+      OTHER: '你是一个客服助手，处理其他问题。',
+    };
+
+    const systemMessage = systemMap[category] || systemMap['OTHER']; // 根据标签获取对应的系统消息，如果没有匹配到标签，默认使用OTHER
+
+    const answerPrompt = ChatPromptTemplate.fromMessages([
+      ['system', systemMessage],
+      ['human', '根据用户的问题： {question}，给出处理建议。'],
+    ])
+      .pipe(this.llm)
+      .pipe(new StringOutputParser());
+
+    const answer = await answerPrompt.invoke({ question }); // 获取处理建议
+
+    return {
+      question,
+      category,
+      answer,
+    };
+  }
 }

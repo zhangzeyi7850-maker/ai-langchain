@@ -17,4 +17,11 @@ export class ChainsController {
     const { keyWords, style } = body;
     return this.chainsService.generateBlog(keyWords, style);
   }
+
+  // 带条件的链式调用
+  @Post('router')
+  smartRouter(@Body() body: { question: string }) {
+    const { question } = body;
+    return this.chainsService.smartRouter(question);
+  }
 }
