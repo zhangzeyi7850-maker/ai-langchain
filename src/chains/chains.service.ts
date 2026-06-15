@@ -60,4 +60,43 @@ export class ChainsService {
       polish: res,
     };
   }
+
+  // 顺序连 顺序执行多步 顺序是固定的 关键词 + 风格 -> 大纲 -> 文章 -> seo标题
+  async generateBlog(keyWords: string, style: string) {
+    // 1. 大纲生成chain
+    const outlinePrompt = ChatPromptTemplate.fromMessages([
+      ['system', '你是一个专业的博客大纲生成助手，根据关键词和风格生成博客大纲。'],
+      ['human', '根据关键词： {keyWords}，风格： {style}，生成博客大纲'],
+    ])
+      .pipe(this.llm)
+      .pipe(new StringOutputParser());
+
+    // 2. 文章生成chain
+    const articlePrompt = ChatPromptTemplate.fromMessages([
+      ['system', '你是一个专业的博客文章生成助手，根据大纲生成博客文章。'],
+      ['human', '根据大纲： {outline}，生成博客文章'],
+    ])
+      .pipe(this.llm)
+      .pipe(new StringOutputParser());
+
+    // 3. SEO标题生成chain
+    const seoTitlePrompt = ChatPromptTemplate.fromMessages([
+      ['system', '你是一个专业的SEO标题生成助手，根据文章内容生成SEO标题。'],
+      ['human', '根据文章内容： {article}，生成SEO标题'],
+    ])
+      .pipe(this.llm)
+      .pipe(new StringOutputParser());
+
+    const outline = await outlinePrompt.invoke({ keyWords, style }); // 生成大纲
+    const article = await articlePrompt.invoke({ outline }); // 生成文章
+    const seoTitle = await seoTitlePrompt.invoke({ article }); // 生成SEO标题
+
+    return {
+      keyWords,
+      style,
+      outline,
+      article,
+      seoTitle,
+    };
+  }
 }

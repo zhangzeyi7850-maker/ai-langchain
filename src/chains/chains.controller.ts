@@ -10,4 +10,11 @@ export class ChainsController {
     const { article } = body;
     return this.chainsService.polish(article);
   }
+
+  @Post('blog')
+  generateBlog(@Body() body: { keyWords: string; style: string }) {
+    // 生成关键词是keyWords，风格是style的博客文章
+    const { keyWords, style } = body;
+    return this.chainsService.generateBlog(keyWords, style);
+  }
 }
