@@ -1,6 +1,6 @@
-import { Controller, Param, Body, Get, Post, Delete } from '@nestjs/common';
+import { Controller, Param, Body, Res, Get, Post, Delete } from '@nestjs/common';
 import { MemoryService } from './memory.service';
-
+import type { Response } from 'express';
 @Controller('memory')
 export class MemoryController {
   constructor(private readonly memoryService: MemoryService) {}
@@ -23,5 +23,10 @@ export class MemoryController {
   @Get('sessions')
   listSessions() {
     return this.memoryService.listSessions();
+  }
+
+  @Post('chat-stream')
+  chatStream(@Body() body: { sessionId: string; message: string }, @Res() res: Response) {
+    return this.memoryService.chatStream(body.sessionId, body.message, res); // 这里为什么要传res对象？因为流式响应需要直接操作底层的响应对象，不能等到方法返回后由框架处理
   }
 }

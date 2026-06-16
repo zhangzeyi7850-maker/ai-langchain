@@ -1,7 +1,8 @@
 import { ChatOllama } from '@langchain/ollama';
 import { Injectable } from '@nestjs/common';
 import { config } from 'src/config';
-import { BaseMessage, HumanMessage, SystemMessage } from '@langchain/core/messages';
+import { AIMessage, BaseMessage, HumanMessage, SystemMessage } from '@langchain/core/messages';
+import type { Response } from 'express';
 
 @Injectable()
 export class MemoryService {
@@ -79,5 +80,34 @@ export class MemoryService {
       sessionId: id,
       turns: Math.floor((h.length - 1) / 2),
     }));
+  }
+
+  async chatStream(sessionId: string, message: string, res: Response) {
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+    res.setHeader('Access-Control-Allow-Origin', '*'); // 允许跨域
+
+    const history = this.getOrCreate(sessionId);
+    history.push(new HumanMessage(message));
+
+    let fullReply = '';
+
+    const stream = await this.llm.stream(history);
+    for await (const chunk of stream) {
+      if (chunk.content) {
+        const text = String(chunk.content);
+        fullReply += text;
+        res.write(`data: ${JSON.stringify({ text, sessionId })}\n\n`); // 发送增量内容
+      }
+    }
+
+    // 流结束后把完整恢复存入历史
+    history.push(new AIMessage(fullReply));
+    res.write(
+      `data: ${JSON.stringify({ text: '[DONE]', turns: Math.floor((history.length - 1) / 2), sessionId })}\n\n`,
+    );
+    // 发送结束标志
+    res.end();
   }
 }
