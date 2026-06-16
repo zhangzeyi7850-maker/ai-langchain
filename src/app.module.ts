@@ -14,6 +14,7 @@ import { PostModule } from './post/post.module';
 import { ModelsModule } from './models/models.module';
 import { PromptsModule } from './prompts/prompts.module';
 import { ChainsModule } from './chains/chains.module';
+import { AgentsModule } from './agents/agents.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { ChainsModule } from './chains/chains.module';
     ModelsModule,
     PromptsModule,
     ChainsModule,
+    AgentsModule,
   ],
   controllers: [AppController, TestController],
   providers: [AppService, TestService],
