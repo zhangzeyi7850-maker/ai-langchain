@@ -16,6 +16,7 @@ import { PromptsModule } from './prompts/prompts.module';
 import { ChainsModule } from './chains/chains.module';
 import { AgentsModule } from './agents/agents.module';
 import { MemoryModule } from './memory/memory.module';
+import { RagModule } from './rag/rag.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { MemoryModule } from './memory/memory.module';
     ChainsModule,
     AgentsModule,
     MemoryModule,
+    RagModule,
   ],
   controllers: [AppController, TestController],
   providers: [AppService, TestService],
