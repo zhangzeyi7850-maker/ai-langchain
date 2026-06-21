@@ -30,7 +30,10 @@ export class RagDbService {
 
   // 创建postgresql pgvector连接池
   private pgPool = new Pool({
-    connectionString: process.env.DATABASE_URL
+    connectionString: process.env.DATABASE_URL,
+    max: 10, // 连接池最大连接数，根据业务需求调整，过大可能导致数据库压力过大，过小可能导致请求排队等待
+    idleTimeoutMillis: 30000, // 连接最大空闲时间，30秒，超过这个时间的连接会被关闭，释放资源
+    connectionTimeoutMillis: 2000 // 连接超时时间，2秒，如果连接数据库超过这个时间没有成功，就放弃连接，避免请求长时间挂起
   })
 
   private vectorStore: PGVectorStore | null = null
@@ -236,7 +239,7 @@ export class RagDbService {
     }
   }
 
-  // 关闭pgPool连接池，释放资源
+  // nestjs应用关闭时会调用这个生命周期钩子函数 关闭pgPool连接池，释放资源
   async onModuleDestroy() {
     await this.pgPool.end()
     console.log('PostgreSQL连接池已关闭。')
