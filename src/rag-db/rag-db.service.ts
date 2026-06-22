@@ -6,7 +6,7 @@ import { HumanMessage, SystemMessage } from '@langchain/core/messages'
 /* 内存向量库，适合小规模数据，重启后数据会丢失 */
 import { MemoryVectorStore } from '@langchain/classic/vectorstores/memory'
 // 真实业务数据储存 pgvector
-import { PGVectorStore, DistanceStrategy } from '@langchain/community/vectorstores/pgvector'
+import { PGVectorStore, DistanceStrategy } from '@langchain/pgvector'
 import { Pool } from 'pg'
 import { ChatPromptTemplate, PromptTemplate, FewShotPromptTemplate } from '@langchain/core/prompts'
 import { Document } from '@langchain/core/documents'
