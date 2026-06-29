@@ -19,7 +19,7 @@ export async function handleDatabaseQuery(args: any): Promise<string> {
   // 构建查询条件
   const where: any = {}
   if (name) {
-    where.name = { containers: name, mode: 'insensitive' } // 模糊搜索，忽略大小写
+    where.name = { contains: name, mode: 'insensitive' } // 模糊搜索，insensitive表示忽略大小写
   }
   if (role) {
     where.role = role

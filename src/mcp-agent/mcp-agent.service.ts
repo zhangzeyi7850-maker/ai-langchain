@@ -6,7 +6,6 @@ import { ChatOllama } from '@langchain/ollama'
 import { MultiServerMCPClient } from '@langchain/mcp-adapters'
 import { HumanMessage, AIMessage, ToolMessage, SystemMessage } from '@langchain/core/messages'
 import { config } from '../config'
-import { de } from 'zod/v4/locales'
 
 @Injectable()
 export class McpAgentService implements OnModuleInit, OnModuleDestroy {
@@ -30,8 +29,8 @@ export class McpAgentService implements OnModuleInit, OnModuleDestroy {
       mcpServers: {
         'local-tools': {
           transport: 'stdio',
-          command: 'ts-node',
-          args: ['src/mcp-server/tools/index.ts'],
+          command: 'tsx',
+          args: ['src/mcp-server/server.ts'],
           env: { ...process.env } as Record<string, string>
         }
         /* // 也可以连接社区现成的 MCP Server（举例，需要单独安装）

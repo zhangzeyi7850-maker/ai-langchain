@@ -12,9 +12,10 @@ export class McpClientService implements OnModuleInit, OnModuleDestroy {
     this.client = new Client({ name: 'nestjs-mcp-client', version: '1.0.0' }, { capabilities: {} })
 
     // stdio 模式 Nestjs以子进程方式启动MCP Server
+    // McpClientService 使用 stdio 模式，在 NestJS 模块初始化时自动以子进程方式启动 MCP Server。
     this.transport = new StdioClientTransport({
-      command: 'ts-node',
-      args: ['src/mcp-server/mcp-server.ts'],
+      command: 'tsx',
+      args: ['src/mcp-server/server.ts'], // MCP Server 的入口文件
       env: { ...process.env } as Record<string, string> // 把当前环境变量传给子进程 包括DATABASE_URL等
     })
 

@@ -3,7 +3,8 @@
     "transpileOnly": true,
     "compilerOptions": {
       "module": "CommonJS",
-      "moduleResolution": "node"
+      "moduleResolution": "node",
+      "resolvePackageJsonExports": false
     }
   },
   "compilerOptions": {
