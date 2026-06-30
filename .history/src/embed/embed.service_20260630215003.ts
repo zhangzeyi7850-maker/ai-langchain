@@ -57,11 +57,6 @@ export class EmbedService {
 
     // 按照相似度降序排列
     scores.sort((a, b) => b.score - a.score)
-
-    return {
-      query, // 原始查询文本
-      results: scores // 按相似度排序的结果列表
-    }
   }
 
   private cosineSimilarity(vecA: number[], vecB: number[]): number {

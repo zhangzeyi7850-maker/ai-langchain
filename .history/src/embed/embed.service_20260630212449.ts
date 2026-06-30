@@ -7,7 +7,6 @@ export class EmbedService {
 
   constructor() {
     // 这是一个本地部署的 Ollama Embeddings 服务，使用 mxbai-embed-large 模型
-    // 把向量数据存储在本地的 Ollama Embeddings 服务中，baseUrl 是服务的地址
     this.embeddings = new OllamaEmbeddings({
       model: 'mxbai-embed-large',
       baseUrl: 'http://localhost:11434'
@@ -57,11 +56,6 @@ export class EmbedService {
 
     // 按照相似度降序排列
     scores.sort((a, b) => b.score - a.score)
-
-    return {
-      query, // 原始查询文本
-      results: scores // 按相似度排序的结果列表
-    }
   }
 
   private cosineSimilarity(vecA: number[], vecB: number[]): number {

@@ -11,6 +11,10 @@ export const config = {
     url: 'http://localhost:8000'
   },
   splitter: {
+    // 每个块的最大字符数（不是 token 数，中文约等于 token）
+    // 太大：一个向量表达内容过多，语义被"稀释"，检索精度下降
+    // 太小：上下文不足，模型回答缺乏背景
+    // 推荐范围：300~800，中文技术文档用 500 比较合适
     chunkSize: 500,
     chunkOverlap: 50,
     separators: ['\n\n', '\n', '。', '！', '？', '；', ' ', '']
