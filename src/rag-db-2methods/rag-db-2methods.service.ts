@@ -170,11 +170,11 @@ export class RagService implements OnModuleInit {
     //   2. 把 (向量, 文本, metadata, id) 存入指定集合
     // 注意：每次调用都是"追加"，不是"覆盖"
     // 如果需要覆盖，先调用 deleteCollection 再重新存
-    await Chroma.fromDocuments(allDocs, this.embeddings, {
+    const vectorStore = new Chroma(this.embeddings, {
       collectionName: dto.collectionName, // 存入哪个集合
-      url: config.chroma.url, // Chroma 服务地址
-      ids: allIds // 每个分块的唯一 ID
+      url: config.chroma.url // Chroma 服务地址
     })
+    await vectorStore.addDocuments(allDocs, { ids: allIds }) // 每个分块的唯一 ID
 
     // 返回存入结果摘要
     return {

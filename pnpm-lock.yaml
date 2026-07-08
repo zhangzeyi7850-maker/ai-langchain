@@ -17,12 +17,18 @@ importers:
       '@langchain/core':
         specifier: ^1.1.48
         version: 1.1.48(openai@6.42.0(zod@4.4.3))
+      '@langchain/langgraph':
+        specifier: 1.2.8
+        version: 1.2.8(@langchain/core@1.1.48(openai@6.42.0(zod@4.4.3)))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3)
       '@langchain/mcp-adapters':
         specifier: ^1.1.3
-        version: 1.1.3(@cfworker/json-schema@4.1.1)(@langchain/core@1.1.48(openai@6.42.0(zod@4.4.3)))(@langchain/langgraph@1.3.6(@langchain/core@1.1.48(openai@6.42.0(zod@4.4.3)))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3))
+        version: 1.1.3(@cfworker/json-schema@4.1.1)(@langchain/core@1.1.48(openai@6.42.0(zod@4.4.3)))(@langchain/langgraph@1.2.8(@langchain/core@1.1.48(openai@6.42.0(zod@4.4.3)))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3))
       '@langchain/ollama':
         specifier: ^1.2.7
         version: 1.2.7(@langchain/core@1.1.48(openai@6.42.0(zod@4.4.3)))
+      '@langchain/openai':
+        specifier: ^1.5.3
+        version: 1.5.3(@langchain/core@1.1.48(openai@6.42.0(zod@4.4.3)))
       '@langchain/pgvector':
         specifier: ^0.1.0
         version: 0.1.0(@langchain/core@1.1.48(openai@6.42.0(zod@4.4.3)))
@@ -1550,6 +1556,26 @@ packages:
     peerDependencies:
       '@langchain/core': ^1.1.44
 
+  '@langchain/langgraph-sdk@1.8.10':
+    resolution: {integrity: sha512-wrB3rkRw5KAmsqezwvKP3midT4qJrV6Hj9XJMYo+cbvXC4HYpSAmyY/VriSyeTFRbLG/OP/pY2Yz+9Z54nSaXQ==}
+    peerDependencies:
+      '@langchain/core': ^1.1.16
+      react: ^18 || ^19
+      react-dom: ^18 || ^19
+      svelte: ^4.0.0 || ^5.0.0
+      vue: ^3.0.0
+    peerDependenciesMeta:
+      '@langchain/core':
+        optional: true
+      react:
+        optional: true
+      react-dom:
+        optional: true
+      svelte:
+        optional: true
+      vue:
+        optional: true
+
   '@langchain/langgraph-sdk@1.9.18':
     resolution: {integrity: sha512-EQLlop/GLlm52Rii06oZDv1bPvrWARnDuzSY6in4d1gnZX2KSQvxajeZH8GYfMjapDVhbo324DRYJgL9euo2fg==}
     peerDependencies:
@@ -1566,6 +1592,17 @@ packages:
       svelte:
         optional: true
       vue:
+        optional: true
+
+  '@langchain/langgraph@1.2.8':
+    resolution: {integrity: sha512-kKkRpC5xFz1e6vPivE7lwRJa5oahLAMaVQvVGZdTa6uJIchIYJDIuM1n93FqGvg8aYVcgYU4FENtKKC5Eh1JYw==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@langchain/core': ^1.1.16
+      zod: ^3.25.32 || ^4.2.0
+      zod-to-json-schema: ^3.x
+    peerDependenciesMeta:
+      zod-to-json-schema:
         optional: true
 
   '@langchain/langgraph@1.3.6':
@@ -1603,6 +1640,12 @@ packages:
     engines: {node: '>=20'}
     peerDependencies:
       '@langchain/core': ^1.2.0
+
+  '@langchain/openai@1.5.3':
+    resolution: {integrity: sha512-OStS2AUvy9oe/hEf/3ndBOFztUDOfuJYLNXh89m3iiJAI2Cp5Dp0n/pvpO27MO0b+VgENd+xSHVyQZ7fe+ulxg==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      '@langchain/core': ^1.2.1
 
   '@langchain/pgvector@0.1.0':
     resolution: {integrity: sha512-1/3ahOTdYwstTXq7mLZWl1ri6C7RL/vALywieVglBZ1iY8ujH15WvI7Afare/OPbMUOIcL26/KmFs2Sqy9MPYA==}
@@ -4793,6 +4836,14 @@ packages:
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
+  uuid@10.0.0:
+    resolution: {integrity: sha512-8XkAphELsDnEGrDxUOHB3RGvXz6TeuYSGEZBOjtTtPm2lwhGBjLgOzLHB63IUWfBpNucQjND6d3AOudO+H3RWQ==}
+    hasBin: true
+
+  uuid@13.0.2:
+    resolution: {integrity: sha512-vzi9uRZ926x4XV73S/4qQaTwPXM2JBj6/6lI/byHH1jOpCzb0zDbfytgA9LcN/hzb2l7WQSQnxITOVx5un/wGw==}
+    hasBin: true
+
   uuid@14.0.0:
     resolution: {integrity: sha512-Qo+uWgilfSmAhXCMav1uYFynlQO7fMFiMVZsQqZRMIXp0O7rR7qjkj+cPvBHLgBqi960QCoo/PH2/6ZtVqKvrg==}
     hasBin: true
@@ -6002,7 +6053,7 @@ snapshots:
       '@ibm-cloud/watsonx-ai': 1.7.13
       '@langchain/classic': 1.0.34(@langchain/core@1.1.48(openai@6.42.0(zod@4.4.3)))(openai@6.42.0(zod@4.4.3))
       '@langchain/core': 1.1.48(openai@6.42.0(zod@4.4.3))
-      '@langchain/openai': 1.4.7(@langchain/core@1.1.48(openai@6.42.0(zod@4.4.3)))
+      '@langchain/openai': 1.5.3(@langchain/core@1.1.48(openai@6.42.0(zod@4.4.3)))
       binary-extensions: 2.3.0
       flat: 5.0.2
       ibm-cloud-sdk-core: 5.4.20
@@ -6045,6 +6096,17 @@ snapshots:
       '@langchain/core': 1.1.48(openai@6.42.0(zod@4.4.3))
       uuid: 14.0.0
 
+  '@langchain/langgraph-sdk@1.8.10(@langchain/core@1.1.48(openai@6.42.0(zod@4.4.3)))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
+    dependencies:
+      '@types/json-schema': 7.0.15
+      p-queue: 9.3.0
+      p-retry: 7.1.1
+      uuid: 13.0.2
+    optionalDependencies:
+      '@langchain/core': 1.1.48(openai@6.42.0(zod@4.4.3))
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
+
   '@langchain/langgraph-sdk@1.9.18(@langchain/core@1.1.48(openai@6.42.0(zod@4.4.3)))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
     dependencies:
       '@langchain/core': 1.1.48(openai@6.42.0(zod@4.4.3))
@@ -6056,6 +6118,22 @@ snapshots:
     optionalDependencies:
       react: 19.2.4
       react-dom: 19.2.4(react@19.2.4)
+
+  '@langchain/langgraph@1.2.8(@langchain/core@1.1.48(openai@6.42.0(zod@4.4.3)))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3)':
+    dependencies:
+      '@langchain/core': 1.1.48(openai@6.42.0(zod@4.4.3))
+      '@langchain/langgraph-checkpoint': 1.0.4(@langchain/core@1.1.48(openai@6.42.0(zod@4.4.3)))
+      '@langchain/langgraph-sdk': 1.8.10(@langchain/core@1.1.48(openai@6.42.0(zod@4.4.3)))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@standard-schema/spec': 1.1.0
+      uuid: 10.0.0
+      zod: 4.4.3
+    optionalDependencies:
+      zod-to-json-schema: 3.25.2(zod@4.4.3)
+    transitivePeerDependencies:
+      - react
+      - react-dom
+      - svelte
+      - vue
 
   '@langchain/langgraph@1.3.6(@langchain/core@1.1.48(openai@6.42.0(zod@4.4.3)))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3)':
     dependencies:
@@ -6074,10 +6152,10 @@ snapshots:
       - svelte
       - vue
 
-  '@langchain/mcp-adapters@1.1.3(@cfworker/json-schema@4.1.1)(@langchain/core@1.1.48(openai@6.42.0(zod@4.4.3)))(@langchain/langgraph@1.3.6(@langchain/core@1.1.48(openai@6.42.0(zod@4.4.3)))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3))':
+  '@langchain/mcp-adapters@1.1.3(@cfworker/json-schema@4.1.1)(@langchain/core@1.1.48(openai@6.42.0(zod@4.4.3)))(@langchain/langgraph@1.2.8(@langchain/core@1.1.48(openai@6.42.0(zod@4.4.3)))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3))':
     dependencies:
       '@langchain/core': 1.1.48(openai@6.42.0(zod@4.4.3))
-      '@langchain/langgraph': 1.3.6(@langchain/core@1.1.48(openai@6.42.0(zod@4.4.3)))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3)
+      '@langchain/langgraph': 1.2.8(@langchain/core@1.1.48(openai@6.42.0(zod@4.4.3)))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3)
       '@modelcontextprotocol/sdk': 1.29.0(@cfworker/json-schema@4.1.1)(zod@4.4.3)
       debug: 4.4.3(supports-color@5.5.0)
       zod: 4.4.3
@@ -6102,6 +6180,15 @@ snapshots:
       - ws
 
   '@langchain/openai@1.5.1(@langchain/core@1.1.48(openai@6.42.0(zod@4.4.3)))':
+    dependencies:
+      '@langchain/core': 1.1.48(openai@6.42.0(zod@4.4.3))
+      js-tiktoken: 1.0.21
+      openai: 6.42.0(zod@4.4.3)
+      zod: 4.4.3
+    transitivePeerDependencies:
+      - ws
+
+  '@langchain/openai@1.5.3(@langchain/core@1.1.48(openai@6.42.0(zod@4.4.3)))':
     dependencies:
       '@langchain/core': 1.1.48(openai@6.42.0(zod@4.4.3))
       js-tiktoken: 1.0.21
@@ -9557,6 +9644,10 @@ snapshots:
       requires-port: 1.0.0
 
   util-deprecate@1.0.2: {}
+
+  uuid@10.0.0: {}
+
+  uuid@13.0.2: {}
 
   uuid@14.0.0: {}
 

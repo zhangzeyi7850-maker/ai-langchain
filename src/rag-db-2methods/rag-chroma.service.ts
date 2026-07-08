@@ -67,11 +67,12 @@ export class RagChromaService implements OnModuleInit {
       this.logger.log(`[Chroma] 文档 ${doc.id} 分块完成：共 ${chunks.length} 块`)
     }
 
-    await Chroma.fromDocuments(allDocs, this.embeddings, {
+    /* chroma 写入 */
+    const vectorStore = new Chroma(this.embeddings, {
       collectionName: dto.collectionName,
-      url: this.chromaUrl,
-      ids: allIds
+      url: this.chromaUrl
     })
+    await vectorStore.addDocuments(allDocs, { ids: allIds })
 
     return {
       success: true,
