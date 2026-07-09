@@ -19,6 +19,12 @@ export const config = {
     defaultTopK: 3,
     queryPrefix: 'Represent this sentence for searching relevant passages: '
   },
+  langGraph: {
+    model: process.env.LANGGRAPH_MODEL || 'qwen3.5:0.8b',
+    baseURL: process.env.OLLAMA_BASE_URL || 'http://localhost:11434/v1',
+    apiKey: process.env.API_KEY || 'ollama',
+    temperature: 0.3
+  },
   server: {
     port: 3000
   }
