@@ -1,3 +1,7 @@
+import * as dotenv from 'dotenv'
+
+dotenv.config()
+
 export const config = {
   ollama: {
     host: 'http://localhost:11434',

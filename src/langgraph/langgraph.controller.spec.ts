@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { EmbedController } from './embed.controller';
+import { LanggraphController } from './langgraph.controller';
 
-describe('EmbedController', () => {
-  let controller: EmbedController;
+describe('LanggraphController', () => {
+  let controller: LanggraphController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [EmbedController],
+      controllers: [LanggraphController],
     }).compile();
 
-    controller = module.get<EmbedController>(EmbedController);
+    controller = module.get<LanggraphController>(LanggraphController);
   });
 
   it('should be defined', () => {

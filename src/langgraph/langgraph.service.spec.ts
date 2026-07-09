@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { EmbedService } from './embed.service';
+import { LanggraphService } from './langgraph.service';
 
-describe('EmbedService', () => {
-  let service: EmbedService;
+describe('LanggraphService', () => {
+  let service: LanggraphService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [EmbedService],
+      providers: [LanggraphService],
     }).compile();
 
-    service = module.get<EmbedService>(EmbedService);
+    service = module.get<LanggraphService>(LanggraphService);
   });
 
   it('should be defined', () => {
