@@ -5,7 +5,7 @@ import { ToolNode } from '@langchain/langGraph/prebuilt'
 import { tool } from '@langchain/core/tools'
 import { AIMessage, HumanMessage, SystemMessage } from '@langchain/core/messages'
 import { z } from 'zod'
-import { config } from '../../../config'
+import { config } from '@/config'
 
 /* 工具定义 */
 /* 工具1: 计算工具 */
