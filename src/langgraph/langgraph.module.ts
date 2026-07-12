@@ -9,6 +9,6 @@ import { ParallelService } from './class-2-service/parallel/parallel.service'
 @Module({
   providers: [LanggraphService, ArticleService, ReactAgentService, RoutingService, ParallelService],
   controllers: [LanggraphController],
-  exports: [LanggraphService, ArticleService]
+  exports: [LanggraphService, ArticleService, ReactAgentService, RoutingService, ParallelService] // 这里添加的服务就能在其他模块直接使用了
 })
 export class LanggraphModule {}
