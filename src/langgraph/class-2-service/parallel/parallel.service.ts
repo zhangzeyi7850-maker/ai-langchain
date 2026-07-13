@@ -59,9 +59,11 @@ export class ParallelService implements OnModuleInit {
         .slice(0, 3)
 
       subTasks.forEach((t, i) => console.log(`子任务 ${i + 1}: ${t}`))
+      // 下面是返回一个 Command，表示要并行执行多个子任务，每个子任务都会触发 processSubTask 节点
       return new Command({
         goto: subTasks.map((task, index) => new Send('processSubTask', { task }))
       })
+      /* 这个Command + goto 表示要并行执行多个子任务，每个子任务都会触发 processSubTask 节点 */
     }
 
     // 子任务节点， 多个实例 并行运行
@@ -91,7 +93,7 @@ export class ParallelService implements OnModuleInit {
 
     this.graph = new StateGraph(ParallelState)
       .addNode('splitTask', splitTask, { ends: ['processSubTask'] })
-      .addNode('processSubTask', processSubTask, { ends: ['mergeResults'] })
+      .addNode('processSubTask', processSubTask, { ends: ['mergeResults'] }) // ends 表示这个节点会触发 mergeResults 节点
       .addNode('mergeResults', mergeResults)
       .addEdge(START, 'splitTask')
       .addEdge('processSubTask', 'mergeResults')
