@@ -1,10 +1,10 @@
 ```plain text
-用户 → 安全审查 Agent ─┐
-     → 性能审查 Agent ─┤→ 汇总报告 → 输出
-     → 规范审查 Agent ─┘
+START → dispatch ──Send──→ reviewAgent（安全维度）─┐
+                 ──Send──→ reviewAgent（性能维度）─┤→ generateReport → END
+                 ──Send──→ reviewAgent（规范维度）─┘
 
-特点：
-  多个 Agent 同时处理不同维度，没有依赖关系
-  Send API 实现，全部完成后汇总
-  适合：独立子任务，追求速度
+执行说明：
+  dispatch：返回 3 个 Send，同时启动 3 个 reviewAgent 实例
+  3 个实例并行审查代码的不同维度
+  全部完成后结果合并，generateReport 生成综合报告
 ```
