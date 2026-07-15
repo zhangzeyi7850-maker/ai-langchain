@@ -4,6 +4,9 @@ import { ArticleService } from './article.service'
 import { ReactAgentService } from './class-2-service/react-agent/react-agent.service'
 import { RoutingService } from './class-2-service/routing/routing.service'
 import { ParallelService } from './class-2-service/parallel/parallel.service'
+import { SupervisorService } from './class-3/supervisor/supervisor.service'
+import { PipelineService } from './class-3/pipeline/pipeline.service'
+import { CodeReviewService } from './class-3/code-review/code-review.service'
 
 @Controller('langgraph')
 export class LanggraphController {
@@ -12,7 +15,10 @@ export class LanggraphController {
     private readonly articleService: ArticleService,
     private readonly reactAgentService: ReactAgentService,
     private readonly routingService: RoutingService,
-    private readonly parallelService: ParallelService
+    private readonly parallelService: ParallelService,
+    private readonly supervisorService: SupervisorService,
+    private readonly pipelineService: PipelineService,
+    private readonly codeReviewService: CodeReviewService
   ) {}
 
   /* 工作流1 无记忆简单回答 */
@@ -55,5 +61,21 @@ export class LanggraphController {
   @Post('parallel')
   parallel(@Body() body: { task: string }) {
     return this.parallelService.parallelChat(body.task)
+  }
+
+  /* 第三章接口 */
+  @Post('supervisor')
+  supervisor(@Body() body: { input: string }) {
+    return this.supervisorService.run(body.input)
+  }
+
+  @Post('pipeline')
+  pipeline(@Body() body: { topic: string }) {
+    return this.pipelineService.createContent(body.topic)
+  }
+
+  @Post('code-review')
+  codeReview(@Body() body: { code: string; language: string }) {
+    return this.codeReviewService.review(body.code, body.language)
   }
 }
