@@ -84,7 +84,7 @@ export class LanggraphService implements OnModuleInit {
 
     return (state.values.messages ?? []).map((msg: any, index: number) => ({
       index,
-      role: msg._getType?.() === 'human' ? 'user' : 'assistant',
+      role: msg.type === 'human' ? 'user' : 'assistant',
       content: msg.content
     }))
   }
