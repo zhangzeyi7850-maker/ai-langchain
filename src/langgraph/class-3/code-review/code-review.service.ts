@@ -78,14 +78,14 @@ export class CodeReviewService implements OnModuleInit {
         parsed = { issues: ['结果解析失败'], score: 5 }
       }
       return {
-        reviewResults: [{ aspect: state.aspect, ...parsed }]
+        reviewResults: [{ aspect: state.aspect, ...parsed }] // aspect 是dispatch的Send传入的参数
       }
     }
 
     // 汇总节点：所有审查实例完成后生成综合报告
     const generateReport = async (state: typeof ReviewState.State) => {
       const avgScore = Math.round(
-        state.reviewResults.reduce((s, r) => s + r.score, 0) / state.reviewResults.length
+        state.reviewResults.reduce((s, r) => s + r.score, 0) / state.reviewResults.length // 算平均分
       )
       const detail = state.reviewResults
         .map(
