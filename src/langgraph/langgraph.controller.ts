@@ -7,6 +7,7 @@ import { ParallelService } from './class-2-service/parallel/parallel.service'
 import { SupervisorService } from './class-3/supervisor/supervisor.service'
 import { PipelineService } from './class-3/pipeline/pipeline.service'
 import { CodeReviewService } from './class-3/code-review/code-review.service'
+import { EmailApprovalService } from './class-4/email-approval/email-approval.service'
 
 @Controller('langgraph')
 export class LanggraphController {
@@ -18,7 +19,8 @@ export class LanggraphController {
     private readonly parallelService: ParallelService,
     private readonly supervisorService: SupervisorService,
     private readonly pipelineService: PipelineService,
-    private readonly codeReviewService: CodeReviewService
+    private readonly codeReviewService: CodeReviewService,
+    private readonly emailApprovalService: EmailApprovalService
   ) {}
 
   /* 工作流1 无记忆简单回答 */
@@ -77,5 +79,31 @@ export class LanggraphController {
   @Post('code-review')
   codeReview(@Body() body: { code: string; language: string }) {
     return this.codeReviewService.review(body.code, body.language)
+  }
+
+  /* 第四章接口 */
+  @Post('email/start')
+  emailStart(@Body() body: { request: string; threadId: string }) {
+    return this.emailApprovalService.start(body.request, body.threadId)
+  }
+
+  @Post('email/:threadId/approve')
+  emailApprove(@Param('threadId') threadId: string) {
+    return this.emailApprovalService.approve(threadId)
+  }
+
+  @Post('email/:threadId/reject')
+  emailReject(@Param('threadId') threadId: string) {
+    return this.emailApprovalService.reject(threadId)
+  }
+
+  @Post('email/:threadId/modify')
+  emailModify(@Param('threadId') threadId: string, @Body() body: { feedback: string }) {
+    return this.emailApprovalService.requestModify(threadId, body.feedback)
+  }
+
+  @Get('email/:threadId/state')
+  emailState(@Param('threadId') threadId: string) {
+    return this.emailApprovalService.getState(threadId)
   }
 }
