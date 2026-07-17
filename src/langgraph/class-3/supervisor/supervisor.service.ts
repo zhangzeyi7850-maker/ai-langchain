@@ -5,6 +5,13 @@ import { HumanMessage, SystemMessage, AIMessage } from '@langchain/core/messages
 import { config } from '@/config'
 
 const SupervisorState = Annotation.Root({
+  /* 
+    这里定义 MessagesAnnotation.spec.messages 的类型的原因是
+    1. MessagesAnnotation.spec.messages 是一个数组，里面的元素是 HumanMessage | AIMessage | SystemMessage
+    2. 但是在 TypeScript 中，数组的类型是协变的，也就是说，如果你定义了一个数组类型为 HumanMessage[]，那么它不能赋值给一个类型为 (HumanMessage | AIMessage | SystemMessage)[] 的变量
+    3. 所以我们需要显式地指定 MessagesAnnotation.spec.messages 的类型为 (HumanMessage | AIMessage | SystemMessage)[]
+    4. 这样就可以确保在使用 MessagesAnnotation.spec.messages 时，TypeScript 能够正确地推断出它的类型，从而避免类型错误
+  */
   messages: MessagesAnnotation.spec.messages,
   nextAgent: Annotation<string>(),
   completedAgents: Annotation<string[]>({
@@ -37,7 +44,7 @@ export class SupervisorService implements OnModuleInit {
           - analyst： 负责分析信息、分析资料
           - writer: 负责撰写报告、优化表达
 
-     t     规则：
+          规则：
           1. 根据任务需求按需选择Agent
           2. ${done}
           3. 所有必要工作完成后输出 FINISH
@@ -81,7 +88,7 @@ export class SupervisorService implements OnModuleInit {
 
         return {
           messages: [new AIMessage(`[${name}] ${res.content}`)],
-          completedAgents: [name]
+          completedAgents: [name] // 这里会往SupervisorState.completedAgents累积，SupervisorState会记录所有已完成的Agent
         }
       }
     }
@@ -110,7 +117,7 @@ export class SupervisorService implements OnModuleInit {
   async run(userInput: string) {
     const result = await this.graph.invoke(
       { messages: [new HumanMessage(userInput)] },
-      { recursionLimit: 3 } // 限制递归深度，避免无限循环
+      { recursionLimit: 10 } // 限制递归深度，避免无限循环
     )
 
     const messages = result.messages as AIMessage[]

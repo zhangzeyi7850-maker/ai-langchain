@@ -84,21 +84,21 @@ export class PipelineService implements OnModuleInit {
     }
 
     this.graph = new StateGraph(PipelineState)
-      .addNode('research', researchAgent)
-      .addNode('outline', outlineAgent)
-      .addNode('writing', writingAgent)
-      .addNode('review', reviewAgent)
-      .addEdge(START, 'research')
-      .addEdge('research', 'outline')
-      .addEdge('outline', 'writing')
-      .addEdge('writing', 'review')
-      .addEdge('review', END)
+      .addNode('researchAgent', researchAgent)
+      .addNode('outlineAgent', outlineAgent)
+      .addNode('writingAgent', writingAgent)
+      .addNode('reviewAgent', reviewAgent)
+      .addEdge(START, 'researchAgent')
+      .addEdge('researchAgent', 'outlineAgent')
+      .addEdge('outlineAgent', 'writingAgent')
+      .addEdge('writingAgent', 'reviewAgent')
+      .addEdge('reviewAgent', END)
       .compile()
   }
 
   async createContent(topic: string) {
     const t0 = Date.now()
-    const result = await this.graph.run({ topic })
+    const result = await this.graph.invoke({ topic })
     return {
       topic,
       progress: result.progress,

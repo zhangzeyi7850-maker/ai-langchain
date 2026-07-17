@@ -103,11 +103,10 @@ export class CodeReviewService implements OnModuleInit {
     }
 
     this.graph = new StateGraph(ReviewState)
-      .addNode('dispatch', dispatch)
       .addNode('reviewAgent', reviewAgent)
       .addNode('generateReport', generateReport)
-      .addEdge(START, 'dispatch')
-      .addEdge('reviewAgent', 'generateReport')
+      .addConditionalEdges(START, dispatch, ['reviewAgent']) // 这里的dispatch相当于路由函数 这里虽然叫 ConditionalEdges，但不一定非要写 if。它也用于“动态分发”。
+      .addEdge('reviewAgent', 'generateReport') // 表示 dispatch 可能路由到的节点是 reviewAgent，主要用于声明路由目标、图校验和图结构展示。它不表示只运行一次。
       .addEdge('generateReport', END)
       .compile()
   }
