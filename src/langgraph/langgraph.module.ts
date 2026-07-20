@@ -9,8 +9,10 @@ import { SupervisorService } from './class-3/supervisor/supervisor.service'
 import { PipelineService } from './class-3/pipeline/pipeline.service'
 import { CodeReviewService } from './class-3/code-review/code-review.service'
 import { EmailApprovalService } from './class-4/email-approval/email-approval.service'
+import { TechResearchModule } from './class-5/tech-research.module'
 
 @Module({
+  imports: [TechResearchModule],
   providers: [
     LanggraphService,
     ArticleService,
