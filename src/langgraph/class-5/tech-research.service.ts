@@ -1,6 +1,5 @@
 import { Injectable, OnModuleInit } from '@nestjs/common'
 import { ChatOpenAI } from '@langchain/openai'
-import { ChatOllama } from '@langchain/ollama'
 import {
   StateGraph,
   START,
@@ -56,23 +55,32 @@ const SingleResearchState = Annotation.Root({
 @Injectable()
 export class TechResearchService implements OnModuleInit {
   private graph: any
-  private llm!: ChatOllama
+  private llm!: ChatOpenAI
 
   onModuleInit() {
-    // this.llm = new ChatOpenAI({
-    //     model: config.langGraph.model,
-    //     apiKey: config.langGraph.apiKey,
-    //     configuration: { baseURL: config.langGraph.baseURL },
-    //     temperature: 0.5,
-    // })
+    this.llm = new ChatOpenAI({
+      model: config.langGraph.model,
+      apiKey: config.langGraph.apiKey,
+      configuration: {
+        baseURL: config.langGraph.baseURL
+      },
+      temperature: 0.5,
+      maxTokens: 512,
+      modelKwargs: {
+        thinking: {
+          type: 'disabled'
+        }
+      }
+    })
+    // ChatOpenAI 需要在 Node.js 环境下使用，而 Ollama 是一个本地模型，可以在本地运行，所以我们使用 ChatOllama 来创建实例。
     // 创建 chatOllama 实例
-    this.llm = new ChatOllama({
+    /*  this.llm = new ChatOllama({
       model: config.ollama.chatModel, // Ollama 模型名称
       temperature: config.ollama.temperature, // 生成文本的随机程度
       baseUrl: config.ollama.host, // Ollama 服务器地址
       think: false, // 是否开启思考模式，开启后模型会先返回一个思考中的消息，等生成完成后再返回最终回答
       numPredict: 512 // 生成文本的最大 token 数量，512 是一个比较合理的值，可以根据需要调整
-    })
+    }) */
     this.graph = this.buildGraph()
     console.log('✅ AI 技术调研助手初始化完成')
   }
@@ -106,6 +114,7 @@ export class TechResearchService implements OnModuleInit {
       list.forEach((d) => console.log(`   → ${d.dimension}`))
 
       // ✅ LangGraph 1.2.x：Send 数组必须包在 Command({ goto }) 里
+      // 并行处理 command + send 的组合可以实现并行执行多个 researchAgent 实例，每个实例处理一个维度的调研任务。
       return new Command({
         goto: list.map(
           (d) =>
@@ -206,7 +215,6 @@ export class TechResearchService implements OnModuleInit {
 
       return {
         report: res.content as string,
-        revisionCount: state.humanFeedback ? 1 : 0,
         executionLog: [`✅ 报告生成（第 ${state.revisionCount + 1} 版）`]
       }
     }
@@ -232,14 +240,17 @@ export class TechResearchService implements OnModuleInit {
       })
 
       if (typeof decision === 'string') {
+        // 批准或者拒绝
         console.log(`   人工决定: ${decision}`)
         return { reviewStatus: decision as any }
       }
       if ((decision as any)?.action === 'revision') {
+        // 需要修改
         console.log(`   人工决定: 需要修改，意见: ${(decision as any).feedback}`)
         return {
           reviewStatus: 'need_revision' as const,
-          humanFeedback: (decision as any).feedback as string
+          humanFeedback: (decision as any).feedback as string,
+          revisionCount: 1
         }
       }
       console.log(`   人工决定: rejected`)
@@ -267,7 +278,7 @@ export class TechResearchService implements OnModuleInit {
         generateReport: 'generateReport',
         [END]: END
       })
-      .compile({ checkpointer: new MemorySaver() })
+      .compile({ checkpointer: new MemorySaver() }) // 这个 checkpointer 会把每个节点的状态保存到内存中，方便后续查询和调试
   }
 
   // ── 对外方法 ──────────────────────────────────────

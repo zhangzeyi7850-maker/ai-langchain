@@ -1,6 +1,5 @@
 import { Injectable, OnModuleInit } from '@nestjs/common'
 import { ChatOpenAI } from '@langchain/openai'
-import { ChatOllama } from '@langchain/ollama'
 import {
   StateGraph,
   START,
@@ -29,15 +28,23 @@ const EmailState = Annotation.Root({
 @Injectable()
 export class EmailApprovalService implements OnModuleInit {
   private graph: any
+  private llm!: ChatOpenAI
 
   onModuleInit() {
-    // 创建 chatOllama 实例
-    const llm = new ChatOllama({
-      model: config.ollama.chatModel, // Ollama 模型名称
-      temperature: config.ollama.temperature, // 生成文本的随机程度
-      baseUrl: config.ollama.host, // Ollama 服务器地址
-      think: false, // 是否开启思考模式，开启后模型会先返回一个思考中的消息，等生成完成后再返回最终回答
-      numPredict: 512 // 生成文本的最大 token 数量，512 是一个比较合理的值，可以根据需要调整
+    // 创建 ChatOpenAI 实例
+    this.llm = new ChatOpenAI({
+      model: config.langGraph.model,
+      apiKey: config.langGraph.apiKey,
+      configuration: {
+        baseURL: config.langGraph.baseURL
+      },
+      temperature: 0.5,
+      maxTokens: 512,
+      modelKwargs: {
+        thinking: {
+          type: 'disabled'
+        }
+      }
     })
 
     /* 节点1 邮件草稿
@@ -54,7 +61,7 @@ export class EmailApprovalService implements OnModuleInit {
           上次草稿：${JSON.stringify(state.draftEmail)}`
         : `根据需求起草一封专业邮件：${state.emailRequest}`
 
-      const res = await llm.invoke([
+      const res = await this.llm.invoke([
         new HumanMessage(
           `${prompt}\n\n输出 JSON（不要其他内容）：
           {"subject":"邮件主题","recipient":"收件人","body":"正文内容"}`
