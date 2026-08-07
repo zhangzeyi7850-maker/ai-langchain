@@ -1232,7 +1232,7 @@ UI 问题：
 例如：
 
 ```ts
-expect(add(a, b)).toBe(a + b);
+expect(add(a, b)).toBe(a + b)
 ```
 
 测试和实现使用相同逻辑计算答案，就很难发现错误。
